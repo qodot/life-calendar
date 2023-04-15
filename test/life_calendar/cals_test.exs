@@ -7,6 +7,7 @@ defmodule LifeCalendar.CalsTest do
     alias LifeCalendar.Cals.Cal
 
     import LifeCalendar.CalsFixtures
+    import LifeCalendar.AccountsFixtures
 
     @invalid_attrs %{birthday: nil, lifespan: nil, name: nil}
 
@@ -21,7 +22,8 @@ defmodule LifeCalendar.CalsTest do
     end
 
     test "create_cal/1 with valid data creates a cal" do
-      valid_attrs = %{birthday: ~D[2023-04-14], lifespan: 42, name: "some name"}
+      user = user_fixture()
+      valid_attrs = %{birthday: ~D[2023-04-14], lifespan: 42, name: "some name", user_id: user.id}
 
       assert {:ok, %Cal{} = cal} = Cals.create_cal(valid_attrs)
       assert cal.birthday == ~D[2023-04-14]

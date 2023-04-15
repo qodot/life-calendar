@@ -14,7 +14,7 @@ defmodule LifeCalendar.Cals.Cal do
   @doc false
   def changeset(cal, attrs) do
     cal
-    |> cast(attrs, [:name, :birthday, :lifespan])
-    |> validate_required([:name, :birthday, :lifespan])
+    |> cast(attrs, [:name, :birthday, :lifespan, :user_id])
+    |> validate_required([:name, :birthday, :lifespan, :user_id])
   end
 end

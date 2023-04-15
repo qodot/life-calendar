@@ -70,7 +70,9 @@ defmodule LifeCalendarWeb.CalLive.FormComponent do
   end
 
   defp save_cal(socket, :new, cal_params) do
-    case Cals.create_cal(cal_params) do
+    new_cal_params = Map.put(cal_params, "user_id", socket.assigns.current_user.id)
+
+    case Cals.create_cal(new_cal_params) do
       {:ok, cal} ->
         notify_parent({:saved, cal})
 
