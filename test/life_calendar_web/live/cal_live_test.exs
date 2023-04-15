@@ -3,6 +3,7 @@ defmodule LifeCalendarWeb.CalLiveTest do
 
   import Phoenix.LiveViewTest
   import LifeCalendar.CalsFixtures
+  import LifeCalendar.AccountsFixtures
 
   @create_attrs %{birthday: "2023-04-14", lifespan: 42, name: "some name"}
   @update_attrs %{birthday: "2023-04-15", lifespan: 43, name: "some updated name"}
@@ -17,14 +18,14 @@ defmodule LifeCalendarWeb.CalLiveTest do
     setup [:create_cal]
 
     test "lists all cals", %{conn: conn, cal: cal} do
-      {:ok, _index_live, html} = live(conn, ~p"/cals")
+      {:ok, _index_live, html} = conn |> log_in_user(user_fixture()) |> live(~p"/cals")
 
       assert html =~ "Listing Cals"
       assert html =~ cal.name
     end
 
     test "saves new cal", %{conn: conn} do
-      {:ok, index_live, _html} = live(conn, ~p"/cals")
+      {:ok, index_live, _html} = conn |> log_in_user(user_fixture()) |> live(~p"/cals")
 
       assert index_live |> element("a", "New Cal") |> render_click() =~
                "New Cal"
@@ -47,7 +48,7 @@ defmodule LifeCalendarWeb.CalLiveTest do
     end
 
     test "updates cal in listing", %{conn: conn, cal: cal} do
-      {:ok, index_live, _html} = live(conn, ~p"/cals")
+      {:ok, index_live, _html} = conn |> log_in_user(user_fixture()) |> live(~p"/cals")
 
       assert index_live |> element("#cals-#{cal.id} a", "Edit") |> render_click() =~
                "Edit Cal"
@@ -70,7 +71,7 @@ defmodule LifeCalendarWeb.CalLiveTest do
     end
 
     test "deletes cal in listing", %{conn: conn, cal: cal} do
-      {:ok, index_live, _html} = live(conn, ~p"/cals")
+      {:ok, index_live, _html} = conn |> log_in_user(user_fixture()) |> live(~p"/cals")
 
       assert index_live |> element("#cals-#{cal.id} a", "Delete") |> render_click()
       refute has_element?(index_live, "#cals-#{cal.id}")
@@ -81,14 +82,14 @@ defmodule LifeCalendarWeb.CalLiveTest do
     setup [:create_cal]
 
     test "displays cal", %{conn: conn, cal: cal} do
-      {:ok, _show_live, html} = live(conn, ~p"/cals/#{cal}")
+      {:ok, _show_live, html} = conn |> log_in_user(user_fixture()) |> live(~p"/cals/#{cal}")
 
       assert html =~ "Show Cal"
       assert html =~ cal.name
     end
 
     test "updates cal within modal", %{conn: conn, cal: cal} do
-      {:ok, show_live, _html} = live(conn, ~p"/cals/#{cal}")
+      {:ok, show_live, _html} = conn |> log_in_user(user_fixture()) |> live(~p"/cals/#{cal}")
 
       assert show_live |> element("a", "Edit") |> render_click() =~
                "Edit Cal"

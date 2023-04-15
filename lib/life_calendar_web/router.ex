@@ -68,6 +68,12 @@ defmodule LifeCalendarWeb.Router do
       on_mount: [{LifeCalendarWeb.UserAuth, :ensure_authenticated}] do
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+
+      live "/cals", CalLive.Index, :index
+      live "/cals/new", CalLive.Index, :new
+      live "/cals/:id/edit", CalLive.Index, :edit
+      live "/cals/:id", CalLive.Show, :show
+      live "/cals/:id/show/edit", CalLive.Show, :edit
     end
   end
 
