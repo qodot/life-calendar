@@ -1,0 +1,43 @@
+<.header>
+  Listing Cals
+  <:actions>
+    <.link patch={~p"/cals/new"}>
+      <.button>New Cal</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="cals"
+  rows={@streams.cals}
+  row_click={fn {_id, cal} -> JS.navigate(~p"/cals/#{cal}") end}
+>
+  <:col :let={{_id, cal}} label="Name"><%= cal.name %></:col>
+  <:col :let={{_id, cal}} label="Birthday"><%= cal.birthday %></:col>
+  <:col :let={{_id, cal}} label="Lifespan"><%= cal.lifespan %></:col>
+  <:action :let={{_id, cal}}>
+    <div class="sr-only">
+      <.link navigate={~p"/cals/#{cal}"}>Show</.link>
+    </div>
+    <.link patch={~p"/cals/#{cal}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, cal}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: cal.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="cal-modal" show on_cancel={JS.patch(~p"/cals")}>
+  <.live_component
+    module={LifeCalendarWeb.CalLive.FormComponent}
+    id={@cal.id || :new}
+    title={@page_title}
+    action={@live_action}
+    cal={@cal}
+    patch={~p"/cals"}
+  />
+</.modal>

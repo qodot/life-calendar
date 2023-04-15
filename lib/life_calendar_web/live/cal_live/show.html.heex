@@ -1,0 +1,28 @@
+<.header>
+  Cal <%= @cal.id %>
+  <:subtitle>This is a cal record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/cals/#{@cal}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit cal</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @cal.name %></:item>
+  <:item title="Birthday"><%= @cal.birthday %></:item>
+  <:item title="Lifespan"><%= @cal.lifespan %></:item>
+</.list>
+
+<.back navigate={~p"/cals"}>Back to cals</.back>
+
+<.modal :if={@live_action == :edit} id="cal-modal" show on_cancel={JS.patch(~p"/cals/#{@cal}")}>
+  <.live_component
+    module={LifeCalendarWeb.CalLive.FormComponent}
+    id={@cal.id}
+    title={@page_title}
+    action={@live_action}
+    cal={@cal}
+    patch={~p"/cals/#{@cal}"}
+  />
+</.modal>
