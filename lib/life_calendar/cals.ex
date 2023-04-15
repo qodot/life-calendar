@@ -21,6 +21,15 @@ defmodule LifeCalendar.Cals do
     Repo.all(Cal)
   end
 
+  def list_cals_for_user(user_id) do
+    query =
+      from c in Cal,
+        where: c.user_id == ^user_id,
+        select: c
+
+    Repo.all(query)
+  end
+
   @doc """
   Gets a single cal.
 

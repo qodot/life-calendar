@@ -6,7 +6,7 @@ defmodule LifeCalendarWeb.CalLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, stream(socket, :cals, Cals.list_cals())}
+    {:ok, stream(socket, :cals, Cals.list_cals_for_user(socket.assigns.current_user.id))}
   end
 
   @impl true
