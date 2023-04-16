@@ -1,17 +1,55 @@
-<.header>
-  <div class="flex flex-row justify-between items-center">
-    <.back navigate={~p"/cals"}>목록으로</.back>
-    <.link patch={~p"/cals/#{@cal}/show/edit"} phx-click={JS.push_focus()}>
-      <.button>수정</.button>
-    </.link>
-  </div>
-</.header>
+<div class="mx-auto max-w-2xl">
+  <.header>
+    <div class="flex flex-row justify-between items-center">
+      <.back navigate={~p"/cals"}>목록으로</.back>
+      <.link patch={~p"/cals/#{@cal}/show/edit"} phx-click={JS.push_focus()}>
+        <.button>수정</.button>
+      </.link>
+    </div>
+  </.header>
 
-<.list>
-  <:item title="이름"><%= @cal.name %></:item>
-  <:item title="생일"><%= @cal.birthday %></:item>
-  <:item title="수명"><%= @cal.lifespan %></:item>
-</.list>
+  <.list>
+    <:item title="이름"><%= @cal.name %></:item>
+    <:item title="생일"><%= @cal.birthday %></:item>
+    <:item title="수명"><%= @cal.lifespan %></:item>
+  </.list>
+</div>
+
+<div class="mt-10 flex justify-center items-center">
+  <table>
+    <thead>
+      <tr>
+        <th />
+        <%= for week <- 1..52 do %>
+          <th>
+            <div class="text-xs"><%= week %></div>
+          </th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for year <- @years do %>
+        <tr>
+          <td>
+            <div class="text-xs"><%= year.year %></div>
+          </td>
+          <%= for week <- year.weeks do %>
+            <td>
+              <%= case week.time_type do %>
+                <% :past -> %>
+                  <div class="w-5 h-5 bg-gray-600" />
+                <% :now -> %>
+                  <div class="w-5 h-5 bg-blue-600" />
+                <% :future -> %>
+                  <div class="w-5 h-5 bg-gray-300" />
+              <% end %>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
 
 <.modal :if={@live_action == :edit} id="cal-modal" show on_cancel={JS.patch(~p"/cals/#{@cal}")}>
   <.live_component
@@ -23,39 +61,3 @@
     patch={~p"/cals/#{@cal}"}
   />
 </.modal>
-
-<table>
-  <thead>
-    <tr>
-      <th>
-        <div class="text-xs">Year</div>
-      </th>
-      <%= for week <- 1..52 do %>
-        <th>
-          <div class="text-xs"><%= week %></div>
-        </th>
-      <% end %>
-    </tr>
-  </thead>
-  <tbody>
-    <%= for year <- @years do %>
-      <tr>
-        <td>
-          <div class="text-xs"><%= year.year %></div>
-        </td>
-        <%= for week <- year.weeks do %>
-          <td>
-            <%= case week.time_type do %>
-              <% :past -> %>
-                <div class="w-5 h-5 bg-gray-600" />
-              <% :now -> %>
-                <div class="w-5 h-5 bg-blue-600" />
-              <% :future -> %>
-                <div class="w-5 h-5 bg-gray-300" />
-            <% end %>
-          </td>
-        <% end %>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
