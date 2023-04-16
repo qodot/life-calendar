@@ -9,7 +9,7 @@ defmodule LifeCalendarWeb.CalLive.FormComponent do
     <div>
       <.header>
         <%= @title %>
-        <:subtitle>Use this form to manage cal records in your database.</:subtitle>
+        <:subtitle>달력 정보를 수정합니다.</:subtitle>
       </.header>
 
       <.simple_form
@@ -19,11 +19,12 @@ defmodule LifeCalendarWeb.CalLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={@form[:name]} type="text" label="Name" />
-        <.input field={@form[:birthday]} type="date" label="Birthday" />
-        <.input field={@form[:lifespan]} type="number" label="Lifespan" />
+        <.input field={@form[:name]} type="text" label="이름" />
+        <.input field={@form[:birthday]} type="date" label="생일" />
+        <.input field={@form[:lifespan]} type="number" label="예상 수명" />
+
         <:actions>
-          <.button phx-disable-with="Saving...">Save Cal</.button>
+          <.button phx-disable-with="저장 중...">저장</.button>
         </:actions>
       </.simple_form>
     </div>
@@ -61,7 +62,7 @@ defmodule LifeCalendarWeb.CalLive.FormComponent do
 
         {:noreply,
          socket
-         |> put_flash(:info, "Cal updated successfully")
+         |> put_flash(:info, "변경 완료")
          |> push_patch(to: socket.assigns.patch)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -78,7 +79,7 @@ defmodule LifeCalendarWeb.CalLive.FormComponent do
 
         {:noreply,
          socket
-         |> put_flash(:info, "Cal created successfully")
+         |> put_flash(:info, "생성 완료")
          |> push_patch(to: socket.assigns.patch)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
