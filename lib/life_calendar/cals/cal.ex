@@ -16,6 +16,7 @@ defmodule LifeCalendar.Cals.Cal do
     cal
     |> cast(attrs, [:name, :birthday, :lifespan, :user_id])
     |> validate_required([:name, :birthday, :lifespan, :user_id])
+    |> validate_inclusion(:lifespan, (attrs["birthday"] |> age)..120)
   end
 
   defmodule Year do
@@ -24,6 +25,16 @@ defmodule LifeCalendar.Cals.Cal do
 
   defmodule Week do
     defstruct [:year, :week, :time_type]
+  end
+
+  defp age(birthday) do
+    case birthday do
+      nil ->
+        1
+
+      _ ->
+        Date.utc_today().year - (birthday |> Date.from_iso8601!()).year
+    end
   end
 
   @spec years(Cal.t()) :: [Year.t()]
