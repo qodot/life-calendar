@@ -23,7 +23,7 @@ defmodule LifeCalendar.Cals.Cal do
   end
 
   defmodule Week do
-    defstruct [:year, :week, :past?]
+    defstruct [:year, :week, :time_type]
   end
 
   @spec years(Cal.t()) :: [Year.t()]
@@ -55,12 +55,18 @@ defmodule LifeCalendar.Cals.Cal do
   end
 
   defp create_week(year, week, today_year, today_week_number, _birthday_week_number) do
+    now? = today_year == year && today_week_number == week
+
+    past? =
+      today_year > year ||
+        (today_year == year && today_week_number > week)
+
+    time_type = if now?, do: :now, else: if(past?, do: :past, else: :future)
+
     %Week{
       year: year,
       week: week,
-      past?:
-        today_year > year ||
-          (today_year == year && today_week_number > week)
+      time_type: time_type
     }
   end
 end

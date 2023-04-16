@@ -2,6 +2,7 @@ defmodule LifeCalendarWeb.CalLive.Show do
   use LifeCalendarWeb, :live_view
 
   alias LifeCalendar.Cals
+  alias LifeCalendar.Cals.Cal
 
   @impl true
   def mount(_params, _session, socket) do
@@ -15,7 +16,8 @@ defmodule LifeCalendarWeb.CalLive.Show do
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action, cal))
-     |> assign(:cal, cal)}
+     |> assign(:cal, cal)
+     |> assign(:years, cal |> Cal.years())}
   end
 
   defp page_title(:show, cal), do: cal.name
