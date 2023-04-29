@@ -37,11 +37,11 @@
             <td>
               <%= case week.time_type do %>
                 <% :past -> %>
-                  <div class="w-5 h-5 bg-gray-600" />
+                  <div class="w-5 h-5 bg-gray-600 rounded-sm" />
                 <% :now -> %>
-                  <div class="w-5 h-5 bg-blue-600" />
+                  <div class="w-5 h-5 bg-blue-600 rounded-sm" />
                 <% :future -> %>
-                  <div class="w-5 h-5 bg-gray-300" />
+                  <div class="w-5 h-5 bg-gray-300 rounded-sm" />
               <% end %>
             </td>
           <% end %>
