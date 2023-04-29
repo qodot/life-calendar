@@ -1,9 +1,9 @@
 <div class="mx-auto max-w-2xl">
   <.header>
-    Listing Cals
+    내 달력 목록
     <:actions>
       <.link patch={~p"/cals/new"}>
-        <.button>New Cal</.button>
+        <.button>새 달력</.button>
       </.link>
     </:actions>
   </.header>
@@ -13,21 +13,21 @@
     rows={@streams.cals}
     row_click={fn {_id, cal} -> JS.navigate(~p"/cals/#{cal}") end}
   >
-    <:col :let={{_id, cal}} label="Name"><%= cal.name %></:col>
-    <:col :let={{_id, cal}} label="Birthday"><%= cal.birthday %></:col>
-    <:col :let={{_id, cal}} label="Lifespan"><%= cal.lifespan %></:col>
+    <:col :let={{_id, cal}} label="이름"><%= cal.name %></:col>
+    <:col :let={{_id, cal}} label="생일"><%= cal.birthday %></:col>
+    <:col :let={{_id, cal}} label="예상 수명"><%= cal.lifespan %></:col>
     <:action :let={{_id, cal}}>
       <div class="sr-only">
         <.link navigate={~p"/cals/#{cal}"}>Show</.link>
       </div>
-      <.link patch={~p"/cals/#{cal}/edit"}>Edit</.link>
+      <.link patch={~p"/cals/#{cal}/edit"}>수정</.link>
     </:action>
     <:action :let={{id, cal}}>
       <.link
         phx-click={JS.push("delete", value: %{id: cal.id}) |> hide("##{id}")}
-        data-confirm="Are you sure?"
+        data-confirm="정말 삭제하시겠습니까?"
       >
-        Delete
+        삭제
       </.link>
     </:action>
   </.table>

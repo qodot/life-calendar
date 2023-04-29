@@ -15,14 +15,16 @@ defmodule LifeCalendarWeb.CalLive.Index do
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do
+    cal = Cals.get_cal!(id)
+
     socket
-    |> assign(:page_title, "Edit Cal")
-    |> assign(:cal, Cals.get_cal!(id))
+    |> assign(:page_title, "#{cal.name} 수정")
+    |> assign(:cal, cal)
   end
 
   defp apply_action(socket, :new, _params) do
     socket
-    |> assign(:page_title, "New Cal")
+    |> assign(:page_title, "새 달력 생성")
     |> assign(:cal, %Cal{})
   end
 

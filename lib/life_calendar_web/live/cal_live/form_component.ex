@@ -9,7 +9,7 @@ defmodule LifeCalendarWeb.CalLive.FormComponent do
     <div>
       <.header>
         <%= @title %>
-        <:subtitle>달력 정보를 수정합니다.</:subtitle>
+        <:subtitle>달력 정보를 입력합니다.</:subtitle>
       </.header>
 
       <.simple_form
