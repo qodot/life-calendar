@@ -1,6 +1,7 @@
 defmodule LifeCalendarWeb.CalLive.Show do
   use LifeCalendarWeb, :live_view
 
+  alias Ecto
   alias LifeCalendar.Cals
   alias LifeCalendar.Cals.Cal
 
@@ -11,13 +12,23 @@ defmodule LifeCalendarWeb.CalLive.Show do
 
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
-    cal = Cals.get_cal!(id)
+    try do
+      cal = Cals.get_cal!(id)
 
-    {:noreply,
-     socket
-     |> assign(:page_title, page_title(socket.assigns.live_action, cal))
-     |> assign(:cal, cal)
-     |> assign(:years, cal |> Cal.years())}
+      {:noreply,
+       socket
+       |> assign(:page_title, page_title(socket.assigns.live_action, cal))
+       |> assign(:cal, cal)
+       |> assign(:years, cal |> Cal.years())}
+    rescue
+      exception in Ecto.NoResultsError ->
+        IO.inspect(exception)
+
+        {:noreply,
+         socket
+         |> put_flash(:error, "존재하지 않는 캘린더입니다.")
+         |> push_patch(to: "/cals")}
+    end
   end
 
   defp page_title(:show, cal), do: cal.name
