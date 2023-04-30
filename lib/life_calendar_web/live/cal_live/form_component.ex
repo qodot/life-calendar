@@ -54,8 +54,7 @@ defmodule LifeCalendarWeb.CalLive.FormComponent do
   end
 
   def handle_event("save", %{"cal" => cal_params}, socket) do
-    new_cal_params = cal_params |> cal_params_default_birthday()
-    save_cal(socket, socket.assigns.action, new_cal_params)
+    save_cal(socket, socket.assigns.action, cal_params)
   end
 
   defp cal_params_default_birthday(cal_params) do
@@ -65,8 +64,14 @@ defmodule LifeCalendarWeb.CalLive.FormComponent do
     end
   end
 
+  defp cal_params_user_id(cal_params, socket) do
+    cal_params |> Map.put("user_id", socket.assigns.current_user.id)
+  end
+
   defp save_cal(socket, :edit, cal_params) do
-    case Cals.update_cal(socket.assigns.cal, cal_params) do
+    new_cal_params = cal_params |> cal_params_default_birthday()
+
+    case Cals.update_cal(socket.assigns.cal, new_cal_params) do
       {:ok, cal} ->
         notify_parent({:saved, cal})
 
@@ -81,7 +86,7 @@ defmodule LifeCalendarWeb.CalLive.FormComponent do
   end
 
   defp save_cal(socket, :new, cal_params) do
-    new_cal_params = Map.put(cal_params, "user_id", socket.assigns.current_user.id)
+    new_cal_params = cal_params |> cal_params_default_birthday() |> cal_params_user_id(socket)
 
     case Cals.create_cal(new_cal_params) do
       {:ok, cal} ->
