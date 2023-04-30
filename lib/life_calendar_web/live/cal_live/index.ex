@@ -30,7 +30,7 @@ defmodule LifeCalendarWeb.CalLive.Index do
 
   defp apply_action(socket, :index, _params) do
     socket
-    |> assign(:page_title, "Listing Cals")
+    |> assign(:page_title, "내 달력 목록")
     |> assign(:cal, nil)
   end
 
