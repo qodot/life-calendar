@@ -2,8 +2,8 @@ import Config
 
 # Configure your database
 config :life_calendar, LifeCalendar.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "qodot",
+  password: "",
   hostname: "localhost",
   database: "life_calendar_dev",
   stacktrace: true,
