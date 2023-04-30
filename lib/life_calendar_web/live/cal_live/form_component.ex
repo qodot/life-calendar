@@ -43,16 +43,26 @@ defmodule LifeCalendarWeb.CalLive.FormComponent do
 
   @impl true
   def handle_event("validate", %{"cal" => cal_params}, socket) do
+    new_cal_params = cal_params |> cal_params_default_birthday()
+
     changeset =
       socket.assigns.cal
-      |> Cals.change_cal(cal_params)
+      |> Cals.change_cal(new_cal_params)
       |> Map.put(:action, :validate)
 
     {:noreply, assign_form(socket, changeset)}
   end
 
   def handle_event("save", %{"cal" => cal_params}, socket) do
-    save_cal(socket, socket.assigns.action, cal_params)
+    new_cal_params = cal_params |> cal_params_default_birthday()
+    save_cal(socket, socket.assigns.action, new_cal_params)
+  end
+
+  defp cal_params_default_birthday(cal_params) do
+    case cal_params |> Map.get("birthday") do
+      "" -> cal_params |> Map.put("birthday", Date.utc_today() |> Calendar.strftime("%Y-%m-%d"))
+      _ -> cal_params
+    end
   end
 
   defp save_cal(socket, :edit, cal_params) do
