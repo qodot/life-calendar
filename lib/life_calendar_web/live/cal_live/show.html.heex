@@ -36,12 +36,18 @@
           <%= for week <- year.weeks do %>
             <td>
               <%= case week.time_type do %>
+                <% :before_born -> %>
+                  <div class="w-5 h-5" />
                 <% :past -> %>
                   <div class="w-5 h-5 bg-gray-600 rounded-sm" />
                 <% :now -> %>
                   <div class="w-5 h-5 bg-blue-600 rounded-sm" />
                 <% :future -> %>
+                  <div class="w-5 h-5 bg-gray-100 rounded-sm" />
+                <% :old -> %>
                   <div class="w-5 h-5 bg-gray-300 rounded-sm" />
+                <% :after_death -> %>
+                  <div class="w-5 h-5" />
               <% end %>
             </td>
           <% end %>

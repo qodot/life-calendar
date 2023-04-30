@@ -51,7 +51,15 @@ defmodule LifeCalendar.Cals.Cal do
         weeks:
           1..52
           |> Enum.map(fn week ->
-            create_week(year, week, today_year, today_week_number, birthday_week_number)
+            create_week(
+              year,
+              week,
+              today_year,
+              today_week_number,
+              cal.birthday.year,
+              birthday_week_number,
+              cal.lifespan
+            )
           end)
       }
     end)
@@ -65,19 +73,65 @@ defmodule LifeCalendar.Cals.Cal do
     cal.birthday.year..(cal.birthday.year + cal.lifespan)
   end
 
-  defp create_week(year, week, today_year, today_week_number, _birthday_week_number) do
-    now? = today_year == year && today_week_number == week
-
-    past? =
-      today_year > year ||
-        (today_year == year && today_week_number > week)
-
-    time_type = if now?, do: :now, else: if(past?, do: :past, else: :future)
-
+  defp create_week(
+         year,
+         week,
+         today_year,
+         today_week_number,
+         birthday_year,
+         birthday_week_number,
+         lifespan
+       ) do
     %Week{
       year: year,
       week: week,
-      time_type: time_type
+      time_type:
+        time_type(
+          year,
+          week,
+          today_year,
+          today_week_number,
+          birthday_year,
+          birthday_week_number,
+          lifespan
+        )
     }
+  end
+
+  defp time_type(
+         year,
+         week,
+         today_year,
+         today_week_number,
+         birthday_year,
+         birthday_week_number,
+         lifespan
+       ) do
+    this_year? = today_year == year
+    born_year? = birthday_year == year
+    last_year = birthday_year + lifespan
+    last_year? = last_year == year
+    old_year = last_year - lifespan / 10 - 1
+    old_year? = old_year == year
+    after_old_year? = old_year < year
+
+    before_born? = born_year? && birthday_week_number > week
+
+    past? =
+      today_year > year ||
+        (this_year? && today_week_number > week)
+
+    now? = this_year? && today_week_number == week
+    after_death? = last_year? && week >= birthday_week_number
+    old? = (old_year? && week >= birthday_week_number) || after_old_year?
+
+    case {before_born?, past?, now?, after_death?, old?} do
+      {true, true, false, false, false} -> :before_born
+      {false, true, false, false, _} -> :past
+      {false, false, true, false, _} -> :now
+      {false, false, false, false, false} -> :future
+      {false, false, false, true, _} -> :after_death
+      {false, false, false, false, true} -> :old
+    end
   end
 end
