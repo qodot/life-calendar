@@ -32,25 +32,25 @@ defmodule LifeCalendar.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:bcrypt_elixir, "~> 3.0"},
-      {:phoenix, "~> 1.7.2"},
-      {:phoenix_ecto, "~> 4.4"},
-      {:ecto_sql, "~> 3.6"},
+      {:bcrypt_elixir, "~> 3.1.0"},
+      {:phoenix, "~> 1.7.7"},
+      {:phoenix_ecto, "~> 4.4.2"},
+      {:ecto_sql, "~> 3.10.2"},
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_html, "~> 3.3"},
-      {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 0.18.16"},
-      {:floki, ">= 0.30.0", only: :test},
-      {:phoenix_live_dashboard, "~> 0.7.2"},
-      {:esbuild, "~> 0.7", runtime: Mix.env() == :dev},
-      {:tailwind, "~> 0.2.0", runtime: Mix.env() == :dev},
-      {:swoosh, "~> 1.3"},
-      {:finch, "~> 0.13"},
-      {:telemetry_metrics, "~> 0.6"},
+      {:phoenix_html, "~> 3.3.1"},
+      {:phoenix_live_reload, "~> 1.4.1", only: :dev},
+      {:phoenix_live_view, "~> 0.19.5"},
+      {:floki, ">= 0.34.3", only: :test},
+      {:phoenix_live_dashboard, "~> 0.8.1"},
+      {:esbuild, "~> 0.7.1", runtime: Mix.env() == :dev},
+      {:tailwind, "~> 0.2.1", runtime: Mix.env() == :dev},
+      {:swoosh, "~> 1.11.5"},
+      {:finch, "~> 0.16.0"},
+      {:telemetry_metrics, "~> 0.6.1"},
       {:telemetry_poller, "~> 1.0"},
-      {:gettext, "~> 0.20"},
-      {:jason, "~> 1.2"},
-      {:plug_cowboy, "~> 2.5"}
+      {:gettext, "~> 0.23.1"},
+      {:jason, "~> 1.4.1"},
+      {:plug_cowboy, "~> 2.6.1"}
     ]
   end
 
