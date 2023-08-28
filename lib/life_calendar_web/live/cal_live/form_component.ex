@@ -53,6 +53,7 @@ defmodule LifeCalendarWeb.CalLive.FormComponent do
     {:noreply, assign_form(socket, changeset)}
   end
 
+  @impl true
   def handle_event("save", %{"cal" => cal_params}, socket) do
     save_cal(socket, socket.assigns.action, cal_params)
   end
@@ -88,17 +89,26 @@ defmodule LifeCalendarWeb.CalLive.FormComponent do
   defp save_cal(socket, :new, cal_params) do
     new_cal_params = cal_params |> cal_params_default_birthday() |> cal_params_user_id(socket)
 
-    case Cals.create_cal(new_cal_params) do
-      {:ok, cal} ->
-        notify_parent({:saved, cal})
+    case socket.assigns.current_user.id |> Cals.list_cals_for_user() |> length do
+      0 ->
+        case Cals.create_cal(new_cal_params) do
+          {:ok, cal} ->
+            notify_parent({:saved, cal})
 
+            {:noreply,
+             socket
+             |> put_flash(:info, "생성 완료")
+             |> push_patch(to: socket.assigns.patch)}
+
+          {:error, %Ecto.Changeset{} = changeset} ->
+            {:noreply, assign_form(socket, changeset)}
+        end
+
+      _ ->
         {:noreply,
          socket
-         |> put_flash(:info, "생성 완료")
+         |> put_flash(:error, "무료 플랜에서는 하나의 달력만 만들 수 있습니다.")
          |> push_patch(to: socket.assigns.patch)}
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign_form(socket, changeset)}
     end
   end
 
