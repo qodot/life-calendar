@@ -19,14 +19,6 @@ defmodule LifeCalendar.Cals.Cal do
     |> validate_inclusion(:lifespan, (attrs["birthday"] |> age)..120)
   end
 
-  defmodule Year do
-    defstruct [:year, :weeks]
-  end
-
-  defmodule Week do
-    defstruct [:year, :week, :time_type]
-  end
-
   defp age(birthday) do
     case birthday do
       nil ->
@@ -35,6 +27,32 @@ defmodule LifeCalendar.Cals.Cal do
       _ ->
         Date.utc_today().year - (birthday |> Date.from_iso8601!()).year
     end
+  end
+
+  @spec total_days_in_year(integer) :: integer
+  def total_days_in_year(year) do
+    {:ok, first} = Date.new(year, 1, 1)
+    {:ok, last} = Date.new(year, 12, 31)
+    Date.diff(last, first) + 1
+  end
+
+  @spec passed_days_in_year(Date.t()) :: integer
+  def passed_days_in_year(date) do
+    {:ok, first} = Date.new(date.year, 1, 1)
+    Date.diff(date, first) + 1
+  end
+
+  @spec passed_days_ratio_in_year(Date.t()) :: float
+  def passed_days_ratio_in_year(date) do
+    (passed_days_in_year(date) / total_days_in_year(date.year) * 100) |> Float.round(1)
+  end
+
+  defmodule Year do
+    defstruct [:year, :weeks]
+  end
+
+  defmodule Week do
+    defstruct [:year, :week, :time_type]
   end
 
   @spec years(Cal.t()) :: [Year.t()]
