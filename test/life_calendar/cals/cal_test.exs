@@ -3,6 +3,35 @@ defmodule LifeCalendar.Cals.CalTest do
 
   alias LifeCalendar.Cals.Cal
 
+  describe "Cal.deathday" do
+    test "사망일을 반환한다" do
+      cal = %Cal{birthday: ~D[1988-06-21], lifespan: 80}
+      assert cal |> Cal.deathday() == ~D[2068-06-21]
+    end
+  end
+
+  describe "Cal.total_days_in_life" do
+    test "삶의 총 일수를 반환한다" do
+      cal = %Cal{birthday: ~D[1988-06-21], lifespan: 80}
+      # 윤년 더해주기
+      assert cal |> Cal.total_days_in_life() == 365 * 80 + 80 / 4
+    end
+  end
+
+  describe "Cal.passed_days_in_life" do
+    test "특정 날짜 기준 삶의 지나간 일수를 반환한다" do
+      cal = %Cal{birthday: ~D[1988-06-21], lifespan: 80}
+      assert cal |> Cal.passed_days_in_life(~D[2023-01-03]) == 12614
+    end
+  end
+
+  describe "Cal.passed_days_ratio_in_life" do
+    test "특정 날짜 기준 삶의 남은 일수 비율을 반환한다" do
+      cal = %Cal{birthday: ~D[1988-06-21], lifespan: 80}
+      assert cal |> Cal.passed_days_ratio_in_life(~D[2023-01-03]) == 43.2
+    end
+  end
+
   describe "Cal.total_days_in_year" do
     test "특정 연도의 총 일수를 반환한다" do
       cal = %Cal{birthday: ~D[1988-06-21], lifespan: 80}

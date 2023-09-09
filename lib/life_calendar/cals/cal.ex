@@ -29,6 +29,27 @@ defmodule LifeCalendar.Cals.Cal do
     end
   end
 
+  @spec deathday(Cal.t()) :: Date.t()
+  def deathday(cal) do
+    {:ok, day} = Date.new(cal.birthday.year + cal.lifespan, cal.birthday.month, cal.birthday.day)
+    day
+  end
+
+  @spec total_days_in_life(Cal.t()) :: integer
+  def total_days_in_life(cal) do
+    Date.diff(cal |> deathday(), cal.birthday)
+  end
+
+  @spec passed_days_in_life(Cal.t(), Date.t()) :: integer
+  def passed_days_in_life(cal, date) do
+    Date.diff(date, cal.birthday)
+  end
+
+  @spec passed_days_ratio_in_life(Cal.t(), Date.t()) :: float
+  def passed_days_ratio_in_life(cal, date) do
+    (passed_days_in_life(cal, date) / total_days_in_life(cal) * 100) |> Float.round(1)
+  end
+
   @spec total_days_in_year(integer) :: integer
   def total_days_in_year(year) do
     {:ok, first} = Date.new(year, 1, 1)
