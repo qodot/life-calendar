@@ -19,12 +19,18 @@ defmodule LifeCalendarWeb.CalLive.Show do
         raise "NoPermissionError"
       end
 
+      today = Date.utc_today()
+
       {:noreply,
        socket
        |> assign(:page_title, page_title(socket.assigns.live_action, cal))
+       |> assign(:today, today)
        |> assign(:cal, cal)
-       |> assign(:passed_days_ratio_in_life, cal |> Cal.passed_days_ratio_in_life(Date.utc_today()))
-       |> assign(:passed_days_ratio_in_year, Date.utc_today() |> Cal.passed_days_ratio_in_year())
+       |> assign(
+         :passed_days_ratio_in_life,
+         cal |> Cal.passed_days_ratio_in_life(today)
+       )
+       |> assign(:passed_days_ratio_in_year, today |> Cal.passed_days_ratio_in_year())
        |> assign(:years, cal |> Cal.years())}
     rescue
       Ecto.NoResultsError ->
