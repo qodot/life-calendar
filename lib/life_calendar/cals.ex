@@ -21,6 +21,7 @@ defmodule LifeCalendar.Cals do
     Repo.all(Cal)
   end
 
+  @spec list_cals_for_user(integer) :: [Cal.t()]
   def list_cals_for_user(user_id) do
     query =
       from c in Cal,
@@ -44,6 +45,7 @@ defmodule LifeCalendar.Cals do
       ** (Ecto.NoResultsError)
 
   """
+  @spec get_cal!(integer) :: Cal.t()
   def get_cal!(id), do: Repo.get!(Cal, id)
 
   @doc """
