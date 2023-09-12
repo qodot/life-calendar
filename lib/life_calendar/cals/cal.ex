@@ -8,6 +8,8 @@ defmodule LifeCalendar.Cals.Cal do
     field(:name, :string)
     field(:user_id, :id)
 
+    has_many(:periods, LifeCalendar.Cals.Period)
+
     timestamps()
   end
 
